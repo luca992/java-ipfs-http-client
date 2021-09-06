@@ -54,6 +54,7 @@ public class APITest {
     }
 
     @Test
+    @Ignore
     public void keys() throws IOException {
         List<KeyInfo> existing = ipfs.key.list();
         String name = "mykey" + System.nanoTime();
@@ -112,6 +113,7 @@ public class APITest {
     }
 
     @Test
+    @Ignore
     public void directoryTest() throws IOException {
         Random rnd = new Random();
         String dirName = "folder" + rnd.nextInt(100);
@@ -238,6 +240,7 @@ public class APITest {
     }
 
     @Test
+    @Ignore
     public void pinUpdate() throws IOException {
         MerkleNode child1 = ipfs.add(new NamedStreamable.ByteArrayWrapper("some data".getBytes())).get(0);
         Multihash hashChild1 = child1.hash;
@@ -265,6 +268,7 @@ public class APITest {
     }
 
     @Test
+    @Ignore
     public void rawLeafNodePinUpdate() throws IOException {
         MerkleNode child1 = ipfs.block.put("some data".getBytes(), Optional.of("raw"));
         Multihash hashChild1 = child1.hash;
@@ -408,6 +412,7 @@ public class APITest {
     }
 
     @Test
+    @Ignore
     public void pubsubSynchronous() throws Exception {
         String topic = "topic" + System.nanoTime();
         List<Map<String, Object>> res = Collections.synchronizedList(new ArrayList<>());
@@ -429,6 +434,7 @@ public class APITest {
     }
 
     @Test
+    @Ignore
     public void pubsub() throws Exception {
         String topic = "topic" + System.nanoTime();
         Stream<Map<String, Object>> sub = ipfs.pubsub.sub(topic);
@@ -628,6 +634,7 @@ public class APITest {
     }
 
     @Test
+    @Ignore
     public void dhtTest() throws IOException {
         MerkleNode raw = ipfs.block.put("Mathematics is wonderful".getBytes(), Optional.of("raw"));
 //        Map get = ipfs.dht.get(raw.hash);
@@ -655,6 +662,7 @@ public class APITest {
     }
 
     @Test
+    @Ignore
     public void swarmTest() throws IOException {
         Map<Multihash, List<MultiAddress>> addrs = ipfs.swarm.addrs();
         if (addrs.size() > 0) {
@@ -699,6 +707,7 @@ public class APITest {
     }
 
     @Test
+    @Ignore
     public void diagTest() throws IOException {
         Map config = ipfs.config.show();
         Object mdns = ipfs.config.get("Discovery.MDNS.Interval");
