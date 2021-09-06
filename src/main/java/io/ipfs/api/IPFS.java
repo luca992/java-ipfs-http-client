@@ -778,7 +778,16 @@ public class IPFS {
 
     private static InputStream getStream(URL target, int connectTimeoutMillis, int readTimeoutMillis) throws IOException {
         HttpURLConnection conn = configureConnection(target, "POST", connectTimeoutMillis, readTimeoutMillis);
-        return conn.getInputStream();
+        try {
+            return conn.getInputStream();
+        } catch (ConnectException e) {
+            throw new RuntimeException("Couldn't connect to IPFS daemon at "+target+"\n Is IPFS running?");
+        } catch (IOException e) {
+            InputStream errorStream = conn.getErrorStream();
+            String err = errorStream == null ? e.getMessage() : new String(readFully(errorStream));
+            throw new RuntimeException("IOException contacting IPFS daemon.\n"+err+"\nTrailer: " + conn.getHeaderFields().get("Trailer"), e);
+        }
+
     }
 
     private Map postMap(String path, byte[] body, Map<String, String> headers) throws IOException {

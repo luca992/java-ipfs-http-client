@@ -740,6 +740,18 @@ public class APITest {
         ipfs.cat(Multihash.fromBase58("Qmaisz6NMhDB51cCvNWa1GMS7LU1pAxdF4Ld6Ft9kZEP2a"));
     }
 
+    @Test(expected = RuntimeException.class)
+    public void testCatDirectory() throws IOException {
+        Multihash projectApolloArchives = Multihash.fromBase58("QmSnuWmxptJZdLJpKRarxBMS2Ju2oANVrgbr2xWbie9b2D");
+        ipfs.cat(projectApolloArchives);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testCatStreamDirectory() throws IOException {
+        Multihash projectApolloArchives = Multihash.fromBase58("QmSnuWmxptJZdLJpKRarxBMS2Ju2oANVrgbr2xWbie9b2D");
+        ipfs.catStream(projectApolloArchives);
+    }
+
     // this api is disabled until deployment over IPFS is enabled
     public void updateTest() throws IOException {
         Object check = ipfs.update.check();
