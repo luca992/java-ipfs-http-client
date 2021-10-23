@@ -1,5 +1,6 @@
 package io.ipfs.api;
 
+import io.ipfs.api.exceptions.DagNodeIsDirectoryException;
 import io.ipfs.cid.*;
 import io.ipfs.multihash.Multihash;
 import io.ipfs.multiaddr.MultiAddress;
@@ -728,8 +729,15 @@ public class IPFS {
         } catch (IOException e) {
             InputStream errorStream = conn.getErrorStream();
             String err = errorStream == null ? e.getMessage() : new String(readFully(errorStream));
-            throw new RuntimeException("IOException contacting IPFS daemon.\n"+err+"\nTrailer: " + conn.getHeaderFields().get("Trailer"), e);
+            throw getErrorStreamException(err, conn.getHeaderFields().get("Trailer").toString(), e);
         }
+    }
+
+    private static RuntimeException getErrorStreamException(String err, String trailer, IOException e) {
+        if (err.contains("\"Message\":\"this dag node is a directory\"")) {
+            return new DagNodeIsDirectoryException();
+        }
+        return new UncheckedIOException("IOException contacting IPFS daemon.\n" + err + "\nTrailer: " + trailer, e);
     }
 
     private void getObjectStream(InputStream in, Consumer<byte[]> processor, Consumer<IOException> error) {
@@ -785,9 +793,8 @@ public class IPFS {
         } catch (IOException e) {
             InputStream errorStream = conn.getErrorStream();
             String err = errorStream == null ? e.getMessage() : new String(readFully(errorStream));
-            throw new RuntimeException("IOException contacting IPFS daemon.\n"+err+"\nTrailer: " + conn.getHeaderFields().get("Trailer"), e);
+            throw getErrorStreamException(err, conn.getHeaderFields().get("Trailer").toString(), e);
         }
-
     }
 
     private Map postMap(String path, byte[] body, Map<String, String> headers) throws IOException {
