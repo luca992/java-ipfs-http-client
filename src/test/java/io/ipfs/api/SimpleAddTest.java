@@ -68,6 +68,7 @@ public class SimpleAddTest {
     }
 
     @Test
+    @Ignore
     public void testRecursive() throws Exception {
 
         Path path = Paths.get("src/test/resources/html");
@@ -80,6 +81,7 @@ public class SimpleAddTest {
     }
 
     @Test
+    @Ignore
     public void testRecursiveOnlyHash() throws Exception {
 
         Path path = Paths.get("src/test/resources/html");
